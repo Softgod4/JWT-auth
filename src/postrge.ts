@@ -5,11 +5,7 @@ export class Database {
 
   public async ConnectDatabase() {
     this.client = new Client({
-      host: 'localhost',
-      port: 5432,
-      database: 'Test',
-      user: 'postgres',
-      password: 's5620925'
+        // ur database params
     });
     try {
       await this.client.connect();
@@ -25,9 +21,10 @@ export class Database {
       await this.ConnectDatabase();
     }
     try {
-      const query: string = `INSERT INTO jwtauth (${username}, ${password})
-        VALUES ('User', 'User')
+      const query: string = `INSERT INTO jwtauth (username, password)
+        VALUES ('${username}', '${password}')
         `;
+      await this.client?.query(query);
       return true;
     } catch (e) {
       console.log(e);

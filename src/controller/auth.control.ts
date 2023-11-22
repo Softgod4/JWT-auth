@@ -7,6 +7,8 @@ class AuthController {
     console.log(req.body);
     const database = new Database();
     database.ConnectDatabase();
+    database.createUser('softgod', '123');
+    return true
   }
   async getAccounts(req: Request, res: Response) {}
   async deleteAccounts(req: Request, res: Response) {}
