@@ -5,7 +5,7 @@ export class Database {
 
   public async ConnectDatabase() {
     this.client = new Client({
-        // ur database params
+        // ur data
     });
     try {
       await this.client.connect();

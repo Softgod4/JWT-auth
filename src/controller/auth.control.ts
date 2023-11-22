@@ -1,5 +1,13 @@
 import { Request, Response } from 'express';
 import { Database } from '../postrge';
+import { secretKey } from '../config';
+
+const generateAccessToken = (id: string, roles: string | undefined) => {
+  const payload = {
+    id,
+    roles
+  };
+};
 
 class AuthController {
   async createAccount(req: Request, res: Response) {
@@ -8,7 +16,6 @@ class AuthController {
     const database = new Database();
     database.ConnectDatabase();
     database.createUser('softgod', '123');
-    return true
   }
   async getAccounts(req: Request, res: Response) {}
   async deleteAccounts(req: Request, res: Response) {}

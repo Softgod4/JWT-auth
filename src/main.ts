@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from 'express';
 import AuthController from './controller/auth.control';
-
 import dotenv from 'dotenv';
 
 dotenv.config();
