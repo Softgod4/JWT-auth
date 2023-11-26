@@ -8,3 +8,5 @@ INSERT INTO jwtauth (username, password)
 VALUES ('User', 'User')
 
 SELECT * FROM jwtauth
+
+SELECT username FROM jwtauth WHERE username = 'Soddsdsaasda';

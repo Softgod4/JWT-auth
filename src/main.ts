@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import AuthController from './controller/auth.control';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
@@ -9,9 +10,12 @@ const port: string | undefined = process.env.PORT;
 const jsonParser = express.json();
 
 app.use(express.json());
+app.use(bodyParser.json());
+
 const authController = new AuthController();
 
-app.use('/api', authController.createAccount);
+app.post('/api', authController.createAccount);
+app.get('/api', authController.getAccounts);
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/' + 'static/' + 'index.html');
