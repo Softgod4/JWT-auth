@@ -17,6 +17,7 @@ export class Database {
       console.log(e);
     }
   }
+
   public async createUser(
     username: string,
     password: string
@@ -36,19 +37,12 @@ export class Database {
     }
   }
 
-  public async getUser(username: string, password: string): Promise<Boolean> {
+  public async getUser(username: string, password: string): Promise<any> {
     if (!this.client) {
       await this.ConnectDatabase();
     }
-    try {
-      const query: string = `SELECT username FROM jwtauth WHERE username = '${username}' AND password = '${password}';`;
-      await this.client?.query(query, (err, res) => {
-        console.log(err ? err.stack : res.rows[0].message);
-      });
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+    const query: string = `SELECT username FROM jwtauth WHERE username = '${username}' AND password = '${password}';`;
+    const result = await this.client?.query(query);
+    const responce = result?.rows[0] != '[]' ? result?.rows[0] : (console.error(404), null);
   }
 }
