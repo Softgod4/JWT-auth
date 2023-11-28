@@ -26,10 +26,10 @@ export class Database {
       await this.ConnectDatabase();
     }
     try {
-      const query: string = `INSERT INTO public."jwtauth" (username, password)
-        VALUES ('${username}', '${password}')
-        `;
-      await this.client?.query(query);
+      const query: string =
+        'INSERT INTO public."jwtauth" (username, password) VALUES ($1, $2)';
+      const values = [username, password];
+      await this.client?.query(query, values);
       return true;
     } catch (e) {
       console.log(e);
@@ -37,12 +37,25 @@ export class Database {
     }
   }
 
-  public async getUser(username: string, password: string): Promise<any> {
+  public async getUser(username: string, password: string): Promise<any[]> {
     if (!this.client) {
       await this.ConnectDatabase();
     }
-    const query: string = `SELECT username FROM jwtauth WHERE username = '${username}' AND password = '${password}';`;
-    const result = await this.client?.query(query);
-    const responce = result?.rows[0] != '[]' ? result?.rows[0] : (console.error(404), null);
+    const query: string =
+      'SELECT username FROM jwtauth WHERE username = $1 AND password = $2';
+    const values = [username, password];
+    const result = await this.client?.query(query, values);
+    console.log(result?.rows[0]);
+    return await result?.rows[0];
+  }
+
+  public async deleteUser(username: string, password: string): Promise<any> {
+    if (!this.client) {
+      await this.ConnectDatabase();
+    }
+    const query = 'DELETE FROM jwtauth WHERE username = $1 AND password = $2';
+    const values = [username, password];
+    const result = await this.client?.query(query, values);
+    console.log(result?.rows[0]);
   }
 }

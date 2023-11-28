@@ -16,6 +16,7 @@ const authController = new AuthController();
 
 app.post('/api', authController.createAccount);
 app.get('/api', authController.getAccounts);
+app.delete('/api', authController.deleteAccounts);
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(__dirname + '/' + 'static/' + 'index.html');
