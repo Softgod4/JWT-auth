@@ -18,13 +18,21 @@ export class Database {
     }
   }
 
+  private dsntHaveClient = async () => {
+    if (!this.client) {
+      await this.ConnectDatabase();
+    }
+  };
+
+  private async checkUsernameExists(username: string): Promise<boolean> {
+    return true
+  }
+
   public async createUser(
     username: string,
     password: string
   ): Promise<boolean> {
-    if (!this.client) {
-      await this.ConnectDatabase();
-    }
+    this.dsntHaveClient();
     try {
       const query: string =
         'INSERT INTO public."jwtauth" (username, password) VALUES ($1, $2)';
@@ -38,9 +46,7 @@ export class Database {
   }
 
   public async getUser(username: string, password: string): Promise<any[]> {
-    if (!this.client) {
-      await this.ConnectDatabase();
-    }
+    this.dsntHaveClient();
     const query: string =
       'SELECT username FROM jwtauth WHERE username = $1 AND password = $2';
     const values = [username, password];
@@ -50,9 +56,7 @@ export class Database {
   }
 
   public async deleteUser(username: string, password: string): Promise<any> {
-    if (!this.client) {
-      await this.ConnectDatabase();
-    }
+    this.dsntHaveClient();
     const query = 'DELETE FROM jwtauth WHERE username = $1 AND password = $2';
     const values = [username, password];
     const result = await this.client?.query(query, values);

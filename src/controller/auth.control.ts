@@ -2,9 +2,16 @@ import { Request, Response } from 'express';
 import { Database } from '../database/postrge';
 import { sha256 } from 'js-sha256';
 
+const bodyStatus = (
+  req: { body: any },
+  res: { sendStatus: (arg0: number) => any }
+) => {
+  if (!req.body) return res.sendStatus(400);
+};
+
 class AuthController {
   async createAccount(req: Request, res: Response) {
-    if (!req.body) return res.sendStatus(400);
+    bodyStatus(req, res);
     const database = new Database();
     try {
       await database.createUser(req.body.username, sha256(req.body.password));
@@ -15,7 +22,7 @@ class AuthController {
   }
 
   async getAccounts(req: Request, res: Response) {
-    if (!req.body) return res.sendStatus(400);
+    bodyStatus(req, res);
     const database = new Database();
     const status = await database.getUser(
       req.body.username,
@@ -25,7 +32,7 @@ class AuthController {
   }
 
   async deleteAccounts(req: Request, res: Response) {
-    if (!req.body) return res.sendStatus(400);
+    bodyStatus(req, res);
     const database = new Database();
     const status = await database.deleteUser(
       req.body.username,
