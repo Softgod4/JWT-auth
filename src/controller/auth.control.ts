@@ -13,12 +13,11 @@ class AuthController {
   async createAccount(req: Request, res: Response) {
     bodyStatus(req, res);
     const database = new Database();
-    try {
-      await database.createUser(req.body.username, sha256(req.body.password));
-      res.sendStatus(200);
-    } catch {
-      res.sendStatus(404);
-    }
+    const status = await database.createUser(
+      req.body.username,
+      sha256(req.body.password)
+    );
+    status === undefined ? res.sendStatus(404) : res.sendStatus(200);
   }
 
   async getAccounts(req: Request, res: Response) {
