@@ -24,7 +24,7 @@ export class Database {
     }
   };
 
-  private async checkUsernameExists(username: string): Promise<boolean> {
+  private async checkUsernameExists(username: string): Promise<any> {
     const query: string = 'SELECT username FROM jwtauth WHERE username = $1';
     const value = [username];
     const result = await this.client?.query(query, value);
@@ -36,17 +36,13 @@ export class Database {
     password: string
   ): Promise<boolean> {
     this.dsntHaveClient();
-    this.checkUsernameExists(username);
-    try {
-      const query: string =
-        'INSERT INTO public."jwtauth" (username, password) VALUES ($1, $2)';
-      const values = [username, password];
-      await this.client?.query(query, values);
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+    const userExists = await this.checkUsernameExists(username);
+    if (userExists) return false;
+    const query: string =
+      'INSERT INTO public."jwtauth" (username, password) VALUES ($1, $2)';
+    const values = [username, password];
+    await this.client?.query(query, values);
+    return true;
   }
 
   public async getUser(username: string, password: string): Promise<any[]> {
@@ -61,6 +57,8 @@ export class Database {
 
   public async deleteUser(username: string, password: string): Promise<any> {
     this.dsntHaveClient();
+    const userExists = await this.checkUsernameExists(username);
+    if (userExists) return false;
     const query = 'DELETE FROM jwtauth WHERE username = $1 AND password = $2';
     const values = [username, password];
     const result = await this.client?.query(query, values);

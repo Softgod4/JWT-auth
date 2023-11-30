@@ -10,18 +10,14 @@ const bodyStatus = (
 };
 
 class AuthController {
-  async createAccount(req: Request, res: Response) {
+  public async createAccount(req: Request, res: Response): Promise<void> {
     bodyStatus(req, res);
     const database = new Database();
-    try {
-      await database.createUser(req.body.username, sha256(req.body.password));
-      res.sendStatus(200);
-    } catch {
-      res.sendStatus(404);
-    }
+    const status = await database.createUser(req.body.username, sha256(req.body.password));
+    status ? res.sendStatus(200) : res.sendStatus(404);
   }
 
-  async getAccounts(req: Request, res: Response) {
+  public async getAccounts(req: Request, res: Response): Promise<void> {
     bodyStatus(req, res);
     const database = new Database();
     const status = await database.getUser(
@@ -31,7 +27,7 @@ class AuthController {
     status === undefined ? res.sendStatus(404) : res.sendStatus(200);
   }
 
-  async deleteAccounts(req: Request, res: Response) {
+  public async deleteAccounts(req: Request, res: Response): Promise<void> {
     bodyStatus(req, res);
     const database = new Database();
     const status = await database.deleteUser(
