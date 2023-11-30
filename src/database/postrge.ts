@@ -25,7 +25,10 @@ export class Database {
   };
 
   private async checkUsernameExists(username: string): Promise<boolean> {
-    return true
+    const query: string = 'SELECT username FROM jwtauth WHERE username = $1';
+    const value = [username];
+    const result = await this.client?.query(query, value);
+    return await result?.rows[0];
   }
 
   public async createUser(
@@ -33,6 +36,7 @@ export class Database {
     password: string
   ): Promise<boolean> {
     this.dsntHaveClient();
+    this.checkUsernameExists(username);
     try {
       const query: string =
         'INSERT INTO public."jwtauth" (username, password) VALUES ($1, $2)';
