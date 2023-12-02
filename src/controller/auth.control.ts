@@ -13,7 +13,10 @@ class AuthController {
   public async createAccount(req: Request, res: Response): Promise<void> {
     bodyStatus(req, res);
     const database = new Database();
-    const status = await database.createUser(req.body.username, sha256(req.body.password));
+    const status = await database.createUser(
+      req.body.username,
+      sha256(req.body.password)
+    );
     status ? res.sendStatus(200) : res.sendStatus(404);
   }
 
@@ -32,9 +35,8 @@ class AuthController {
     const database = new Database();
     const status = await database.deleteUser(
       req.body.username,
-      sha256(req.body.password)
     );
-    status === undefined ? res.sendStatus(404) : res.sendStatus(200);
+    status === undefined ? res.sendStatus(200) : res.sendStatus(404);
   }
 }
 

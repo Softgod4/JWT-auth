@@ -1,4 +1,5 @@
 import { Client } from 'pg';
+import { sha256 } from 'js-sha256';
 
 export class Database {
   private client: Client | null = null;
@@ -55,12 +56,12 @@ export class Database {
     return await result?.rows[0];
   }
 
-  public async deleteUser(username: string, password: string): Promise<any> {
+  public async deleteUser(username: string): Promise<any[] | undefined> {
     this.dsntHaveClient();
     const userExists = await this.checkUsernameExists(username);
-    if (userExists) return false;
-    const query = 'DELETE FROM jwtauth WHERE username = $1 AND password = $2';
-    const values = [username, password];
+    if (!userExists) return undefined;
+    const query = 'DELETE FROM jwtauth WHERE username = $1';
+    const values = [username];
     const result = await this.client?.query(query, values);
     console.log(result?.rows[0]);
   }
