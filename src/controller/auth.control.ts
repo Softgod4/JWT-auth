@@ -33,9 +33,7 @@ class AuthController {
   public async deleteAccounts(req: Request, res: Response): Promise<void> {
     bodyStatus(req, res);
     const database = new Database();
-    const status = await database.deleteUser(
-      req.body.username,
-    );
+    const status = await database.deleteUser(req.body.username);
     status === undefined ? res.sendStatus(200) : res.sendStatus(404);
   }
 }
