@@ -15,9 +15,9 @@ class AuthController {
     const database = new Database();
     const status = await database.createUser(
       req.body.username,
-      sha256(req.body.password)
+      req.body.password
     );
-    status ? res.sendStatus(200) : res.sendStatus(404);
+    status ? res.sendStatus(404) : res.sendStatus(200);
   }
 
   public async getAccounts(req: Request, res: Response): Promise<void> {
@@ -25,8 +25,10 @@ class AuthController {
     const database = new Database();
     const status = await database.getUser(
       req.body.username,
-      sha256(req.body.password)
+      req.body.password
     );
+    console.log(req.body.username)
+    console.log(req.body.password)
     status === undefined ? res.sendStatus(404) : res.sendStatus(200);
   }
 
