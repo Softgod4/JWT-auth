@@ -15,7 +15,7 @@ class AuthController {
     const database = new Database();
     const status = await database.createUser(
       req.body.username,
-      req.body.password
+      sha256(req.body.password)
     );
     status ? res.sendStatus(404) : res.sendStatus(200);
   }
@@ -25,11 +25,11 @@ class AuthController {
     const database = new Database();
     const status = await database.getUser(
       req.body.username,
-      req.body.password
+      sha256(req.body.password)
     );
     console.log(req.body.username)
     console.log(req.body.password)
-    status === undefined ? res.sendStatus(404) : res.sendStatus(200);
+    status === undefined ? res.sendStatus(200) : res.sendStatus(404);
   }
 
   public async deleteAccounts(req: Request, res: Response): Promise<void> {
